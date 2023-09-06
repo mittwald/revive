@@ -1,7 +1,7 @@
 package test
 
 import (
-	"github.com/mgechev/revive/rule"
+	"github.com/mittwald/revive/rule"
 	"testing"
 )
 

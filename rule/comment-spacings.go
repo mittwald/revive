@@ -5,7 +5,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/mgechev/revive/lint"
+	"github.com/mittwald/revive/lint"
 )
 
 // CommentSpacings Rule check the whether there is a space between

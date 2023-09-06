@@ -4,7 +4,7 @@ import (
 	"go/ast"
 	"go/token"
 
-	"github.com/mgechev/revive/lint"
+	"github.com/mittwald/revive/lint"
 )
 
 // Rule is an interface for linters operating on if-else chains

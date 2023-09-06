@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/fatih/color"
-	"github.com/mgechev/revive/lint"
+	"github.com/mittwald/revive/lint"
 	"github.com/olekukonko/tablewriter"
 )
 

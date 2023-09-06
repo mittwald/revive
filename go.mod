@@ -1,6 +1,6 @@
-module github.com/mgechev/revive
+module github.com/mittwald/revive
 
-go 1.20
+go 1.21
 
 require (
 	github.com/BurntSushi/toml v1.3.2

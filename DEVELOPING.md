@@ -29,7 +29,7 @@ The command will produce the `revive` binary in the root of the project.
 
 ## Development of rules
 
-If you want to develop a new rule, follow as an example the already existing rules in the [rule package](https://github.com/mgechev/revive/tree/master/rule).
+If you want to develop a new rule, follow as an example the already existing rules in the [rule package](https://github.com/mittwald/revive/tree/master/rule).
 
 All rules should implement the following interface:
 
@@ -42,7 +42,7 @@ type Rule interface {
 
 ## Development of formatters
 
-If you want to develop a new formatter, follow as an example the already existing formatters in the [formatter package](https://github.com/mgechev/revive/tree/master/formatter).
+If you want to develop a new formatter, follow as an example the already existing formatters in the [formatter package](https://github.com/mittwald/revive/tree/master/formatter).
 
 All formatters should implement the following interface:
 

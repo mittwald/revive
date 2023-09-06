@@ -7,7 +7,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/mgechev/revive/lint"
+	"github.com/mittwald/revive/lint"
 )
 
 // PackageCommentsRule lints the package comments. It complains if

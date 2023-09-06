@@ -6,7 +6,7 @@ import (
 	"go/token"
 	"sync"
 
-	"github.com/mgechev/revive/lint"
+	"github.com/mittwald/revive/lint"
 	"golang.org/x/tools/go/ast/astutil"
 )
 

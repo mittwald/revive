@@ -3,7 +3,7 @@ package formatter
 import (
 	"fmt"
 
-	"github.com/mgechev/revive/lint"
+	"github.com/mittwald/revive/lint"
 )
 
 // Default is an implementation of the Formatter interface

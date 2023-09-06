@@ -3,10 +3,9 @@ package rule
 import (
 	"fmt"
 	"go/ast"
-	"go/types"
 	"sync"
 
-	"github.com/mgechev/revive/lint"
+	"github.com/mittwald/revive/lint"
 )
 
 const (
@@ -36,7 +35,10 @@ func (u *UncheckedTypeAssertionRule) configure(arguments lint.Arguments) {
 	for k, v := range args {
 		switch k {
 		case "acceptIgnoredAssertionResult":
-			u.acceptIgnoredAssertionResult, _ = v.(bool)
+			u.acceptIgnoredAssertionResult, ok = v.(bool)
+			if !ok {
+				panic(fmt.Sprintf("Unable to parse argument '%s'. Expected boolean.", k))
+			}
 		default:
 			panic(fmt.Sprintf("Unknown argument: %s", k))
 		}
@@ -74,10 +76,13 @@ type lintUnchekedTypeAssertion struct {
 	acceptIgnoredTypeAssertionResult bool
 }
 
-func (w *lintUnchekedTypeAssertion) isBoolType(e ast.Expr) bool {
-	t := w.pkg.TypeOf(e)
-	ut, ok := t.Underlying().(*types.Basic)
-	return (ok && ut != nil) && ut.Info()&types.IsBoolean == 0
+func isIgnored(e ast.Expr) bool {
+	ident, ok := e.(*ast.Ident)
+	if !ok {
+		return false
+	}
+
+	return ident.Name == "_"
 }
 
 func isTypeSwitch(e *ast.TypeAssertExpr) bool {
@@ -113,7 +118,7 @@ func (w *lintUnchekedTypeAssertion) handleAssignment(n *ast.AssignStmt) {
 		w.addFailure(e, ruleUTAMessagePanic)
 	}
 
-	if !w.acceptIgnoredTypeAssertionResult && len(n.Lhs) == 2 && !w.isBoolType(n.Lhs[1]) {
+	if !w.acceptIgnoredTypeAssertionResult && len(n.Lhs) == 2 && isIgnored(n.Lhs[1]) {
 		w.addFailure(e, ruleUTAMessageIgnored)
 	}
 }

@@ -5,7 +5,7 @@ import (
 	"go/ast"
 	"strings"
 
-	"github.com/mgechev/revive/lint"
+	"github.com/mittwald/revive/lint"
 )
 
 // GetReturnRule lints given else constructs.

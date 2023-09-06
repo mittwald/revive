@@ -5,7 +5,7 @@ import (
 	"go/token"
 	"go/types"
 
-	"github.com/mgechev/revive/lint"
+	"github.com/mittwald/revive/lint"
 )
 
 // AtomicRule lints given else constructs.

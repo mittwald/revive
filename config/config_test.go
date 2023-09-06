@@ -5,8 +5,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/mgechev/revive/lint"
-	"github.com/mgechev/revive/rule"
+	"github.com/mittwald/revive/lint"
+	"github.com/mittwald/revive/rule"
 )
 
 func TestGetConfig(t *testing.T) {

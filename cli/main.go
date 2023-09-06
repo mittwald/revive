@@ -9,9 +9,9 @@ import (
 	"strings"
 
 	"github.com/fatih/color"
-	"github.com/mgechev/revive/config"
-	"github.com/mgechev/revive/revivelib"
 	"github.com/mitchellh/go-homedir"
+	"github.com/mittwald/revive/config"
+	"github.com/mittwald/revive/revivelib"
 )
 
 var (

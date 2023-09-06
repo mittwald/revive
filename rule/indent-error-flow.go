@@ -1,8 +1,8 @@
 package rule
 
 import (
-	"github.com/mgechev/revive/internal/ifelse"
-	"github.com/mgechev/revive/lint"
+	"github.com/mittwald/revive/internal/ifelse"
+	"github.com/mittwald/revive/lint"
 )
 
 // IndentErrorFlowRule lints given else constructs.

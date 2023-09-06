@@ -3,9 +3,9 @@ package test
 import (
 	"testing"
 
-	"github.com/mgechev/revive/internal/ifelse"
-	"github.com/mgechev/revive/lint"
-	"github.com/mgechev/revive/rule"
+	"github.com/mittwald/revive/internal/ifelse"
+	"github.com/mittwald/revive/lint"
+	"github.com/mittwald/revive/rule"
 )
 
 // TestEarlyReturn tests early-return rule.
