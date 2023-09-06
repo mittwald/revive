@@ -13,7 +13,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/mgechev/revive/lint"
+	"github.com/mittwald/revive/lint"
 	"github.com/pkg/errors"
 )
 

@@ -57,7 +57,7 @@ Here's how `revive` is different from `golint`:
 - [`checker`](https://github.com/cinar/checker) - Checker helps validating user input through rules defined in struct tags or directly through functions.
 - [`milvus`](https://github.com/milvus-io/milvus) - A cloud-native vector database, storage for next generation AI applications.
 
-*Open a PR to add your project*.
+_Open a PR to add your project_.
 
 <p align="center">
   <img src="./assets/demo.svg" alt="" width="700">
@@ -111,9 +111,10 @@ Here's how `revive` is different from `golint`:
 go install github.com/mgechev/revive@latest
 ```
 
-or get a released executable from the [Releases](https://github.com/mgechev/revive/releases) page.
+or get a released executable from the [Releases](https://github.com/mittwald/revive/releases) page.
 
 You can install the main branch (including the last commit) with:
+
 ```bash
 go install github.com/mgechev/revive@master
 ```
@@ -125,6 +126,7 @@ Since the default behavior of `revive` is compatible with `golint`, without prov
 `revive` supports a `-config` flag whose value should correspond to a TOML file describing which rules to use for `revive`'s linting. If not provided, `revive` will try to use a global config file (assumed to be located at `$HOME/revive.toml`). Otherwise, if no configuration TOML file is found then `revive` uses a built-in set of default linting rules.
 
 ### Docker
+
 A volume needs to be mounted to share the current repository with the container.  
 Please refer to the [bind mounts Docker documentation](https://docs.docker.com/storage/bind-mounts/)
 
@@ -132,7 +134,7 @@ Please refer to the [bind mounts Docker documentation](https://docs.docker.com/s
 docker run -v "$(pwd)":/var/<repository> ghcr.io/mgechev/revive:v1.1.2-next -config /var/<repository>/revive.toml -formatter stylish ./var/kidle/...
 ```
 
-- `-v` is for the volume  
+- `-v` is for the volume
 - `ghcr.io/mgechev/revive:v1.1.2-next ` is the image name and its version corresponding to `revive` command
 - The provided flags are the same as the binary usage.
 
@@ -174,14 +176,16 @@ If you want to use revive with Bazel, take a look at the [rules](https://github.
 ### Linter aggregators
 
 #### golangci-lint
+
 To enable `revive` in `golangci-lint` you need to add `revive` to the list of enabled linters:
 
 ```yaml
 # golangci-lint configuration file
 linters:
-   enable:
-     - revive
+  enable:
+    - revive
 ```
+
 Then `revive` can be configured by adding an entry to the `linters-settings` section of the configuration, for example:
 
 ```yaml
@@ -196,7 +200,7 @@ linters-settings:
         severity: error
         arguments: [80]
       - name: unhandled-error
-        arguments : ["fmt.Printf", "myFunction"]
+        arguments: ["fmt.Printf", "myFunction"]
 ```
 
 The above configuration enables three rules of `revive`: _atomic_, _line-length-limit_ and _unhandled-error_ and pass some arguments to the last two.
@@ -218,10 +222,10 @@ Please notice that if no particular configuration is provided, `revive` will beh
   - `friendly` - outputs the failures when found. Shows summary of all the failures.
   - `stylish` - formats the failures in a table. Keep in mind that it doesn't stream the output so it might be perceived as slower compared to others.
   - `checkstyle` - outputs the failures in XML format compatible with that of Java's [Checkstyle](https://checkstyle.org/).
-- `-max_open_files` -  maximum number of open files at the same time. Defaults to unlimited.
+
+- `-max_open_files` - maximum number of open files at the same time. Defaults to unlimited.
 - `-set_exit_status` - set exit status to 1 if any issues are found, overwrites `errorCode` and `warningCode` in config.
 - `-version` - get revive version.
-
 
 ### Sample Invocations
 
@@ -266,6 +270,7 @@ You can document why you disable the linter by adding a trailing text in the dir
 ```go
 //revive:disable Until the code is stable
 ```
+
 ```go
 //revive:disable:cyclomatic High complexity score but easy to understand
 ```
@@ -332,6 +337,7 @@ For example:
 [rule.line-length-limit]
     Disabled = true
 ```
+
 When enabling all rules you still need/can provide specific configurations for rules.
 The following files is an example configuration were all rules are enabled, with exception to those that are explicitly disabled, and some rules are configured with particular arguments:
 
@@ -451,91 +457,90 @@ You can use following exclude patterns
 3. regexes (should have prefix ~) `~\.(pb|auto|generated)\.go$`
 4. well-known `TEST` (same as `**/*_test.go`)
 5. special cases:
-  a. `*` and `~` patterns exclude all files (same effect than disabling the rule)
-  b. `""` (empty) pattern excludes nothing
+   a. `*` and `~` patterns exclude all files (same effect than disabling the rule)
+   b. `""` (empty) pattern excludes nothing
 
-> NOTE: do not mess with `exclude` that can  be used at top level of TOML file, that mean "exclude package patterns", not "exclude file patterns"
+> NOTE: do not mess with `exclude` that can be used at top level of TOML file, that mean "exclude package patterns", not "exclude file patterns"
 
 ## Available Rules
 
 List of all available rules. The rules ported from `golint` are left unchanged and indicated in the `golint` column.
-| Name                  | Config | Description                                                      | `golint` | Typed |
+| Name | Config | Description | `golint` | Typed |
 | --------------------- | :----: | :--------------------------------------------------------------- | :------: | :---: |
-| [`context-keys-type`](./RULES_DESCRIPTIONS.md#context-key-types)   |  n/a   | Disallows the usage of basic types in `context.WithValue`.       |   yes    |  yes  |
-| [`time-equal`](./RULES_DESCRIPTIONS.md#time-equal)         |  n/a   | Suggests to use `time.Time.Equal` instead of `==` and `!=` for equality check time.                 |   no    |  yes  |
-| [`time-naming`](./RULES_DESCRIPTIONS.md#time-naming)         |  n/a   | Conventions around the naming of time variables.                 |   yes    |  yes  |
-| [`unchecked-type-assertions`](./RULES_DESCRIPTIONS.md#unchecked-type-assertions)         |  n/a   | Disallows type assertions without checking the result.                 |   no    |  yes  |
-| [`var-declaration`](./RULES_DESCRIPTIONS.md#var-declaration)     |  n/a   | Reduces redundancies around variable declaration.                |   yes    |  yes  |
-| [`unexported-return`](./RULES_DESCRIPTIONS.md#unexported-return)   |  n/a   | Warns when a public return is from unexported type.              |   yes    |  yes  |
-| [`errorf`](./RULES_DESCRIPTIONS.md#errorf)              |  n/a   | Should replace `errors.New(fmt.Sprintf())` with `fmt.Errorf()`   |   yes    |  yes  |
-| [`blank-imports`](./RULES_DESCRIPTIONS.md#blank-imports)       |  n/a   | Disallows blank imports                                          |   yes    |  no   |
-| [`context-as-argument`](./RULES_DESCRIPTIONS.md#context-as-argument) |  n/a   | `context.Context` should be the first argument of a function.    |   yes    |  no   |
-| [`dot-imports`](./RULES_DESCRIPTIONS.md#dot-imports)         |  n/a   | Forbids `.` imports.                                             |   yes    |  no   |
-| [`error-return`](./RULES_DESCRIPTIONS.md#error-return)        |  n/a   | The error return parameter should be last.                       |   yes    |  no   |
-| [`error-strings`](./RULES_DESCRIPTIONS.md#error-strings)       |  []string   | Conventions around error strings.                                |   yes    |  no   |
-| [`error-naming`](./RULES_DESCRIPTIONS.md#error-naming)        |  n/a   | Naming of error variables.                                       |   yes    |  no   |
-| [`exported`](./RULES_DESCRIPTIONS.md#exported)            |  []string   | Naming and commenting conventions on exported symbols.           |   yes    |  no   |
-| [`if-return`](./RULES_DESCRIPTIONS.md#if-return)           |  n/a   | Redundant if when returning an error.                            |   no    |  no   |
-| [`increment-decrement`](./RULES_DESCRIPTIONS.md#increment-decrement) |  n/a   | Use `i++` and `i--` instead of `i += 1` and `i -= 1`.            |   yes    |  no   |
-| [`var-naming`](./RULES_DESCRIPTIONS.md#var-naming)          |  whitelist & blacklist of initialisms   | Naming rules.                                                    |   yes    |  no   |
-| [`package-comments`](./RULES_DESCRIPTIONS.md#package-comments)    |  n/a   | Package commenting conventions.                                  |   yes    |  no   |
-| [`range`](./RULES_DESCRIPTIONS.md#range)               |  n/a   | Prevents redundant variables when iterating over a collection.   |   yes    |  no   |
-| [`receiver-naming`](./RULES_DESCRIPTIONS.md#receiver-naming)     |  n/a   | Conventions around the naming of receivers.                      |   yes    |  no   |
-| [`indent-error-flow`](./RULES_DESCRIPTIONS.md#indent-error-flow)   |  []string   | Prevents redundant else statements.                              |   yes    |  no   |
-| [`argument-limit`](./RULES_DESCRIPTIONS.md#argument-limit)      |  int (defaults to 8)  | Specifies the maximum number of arguments a function can receive |    no    |  no   |
-| [`cyclomatic`](./RULES_DESCRIPTIONS.md#cyclomatic)          |  int (defaults to 10)   | Sets restriction for maximum Cyclomatic complexity.              |    no    |  no   |
-| [`max-public-structs`](./RULES_DESCRIPTIONS.md#max-public-structs)  |  int (defaults to 5)  | The maximum number of public structs in a file.                  |    no    |  no   |
-| [`file-header`](./RULES_DESCRIPTIONS.md#file-header)         | string (defaults to none)| Header which each file should have.                              |    no    |  no   |
-| [`empty-block`](./RULES_DESCRIPTIONS.md#empty-block)         |  n/a   | Warns on empty code blocks                                       |    no    |  yes   |
-| [`superfluous-else`](./RULES_DESCRIPTIONS.md#superfluous-else)    |  []string   | Prevents redundant else statements (extends [`indent-error-flow`](./RULES_DESCRIPTIONS.md#indent-error-flow)) |    no    |  no   |
-| [`confusing-naming`](./RULES_DESCRIPTIONS.md#confusing-naming)    |  n/a   | Warns on methods with names that differ only by capitalization   |    no    |  no   |
-| [`get-return`](./RULES_DESCRIPTIONS.md#get-return)          |  n/a   | Warns on getters that do not yield any result                    |    no    |  no   |
-| [`modifies-parameter`](./RULES_DESCRIPTIONS.md#modifies-parameter)  |  n/a   | Warns on assignments to function parameters                      |    no    |  no   |
-| [`confusing-results`](./RULES_DESCRIPTIONS.md#confusing-results)   |  n/a   | Suggests to name potentially confusing function results          |    no    |  no   |
-| [`deep-exit`](./RULES_DESCRIPTIONS.md#deep-exit)           |  n/a   | Looks for program exits in funcs other than `main()` or `init()` |    no    |  no   |
-| [`unused-parameter`](./RULES_DESCRIPTIONS.md#unused-parameter)    |  n/a   | Suggests to rename or remove unused function parameters          |    no    |  no   |
-| [`unreachable-code`](./RULES_DESCRIPTIONS.md#unreachable-code)    |  n/a   | Warns on unreachable code                                        |    no    |  no   |
-| [`add-constant`](./RULES_DESCRIPTIONS.md#add-constant)        |  map   | Suggests using constant for magic numbers and string literals    |    no    |  no   |
-| [`flag-parameter`](./RULES_DESCRIPTIONS.md#flag-parameter)      |  n/a   | Warns on boolean parameters that create a control coupling       |    no    |  no   |
-| [`unnecessary-stmt`](./RULES_DESCRIPTIONS.md#unnecessary-stmt)    |  n/a   | Suggests removing or simplifying unnecessary statements          |    no    |  no   |
-| [`struct-tag`](./RULES_DESCRIPTIONS.md#struct-tag)          |  []string   | Checks common struct tags like `json`, `xml`, `yaml`               |    no    |  no   |
-| [`modifies-value-receiver`](./RULES_DESCRIPTIONS.md#modifies-value-receiver) |  n/a   | Warns on assignments to value-passed method receivers        |    no    |  yes  |
-| [`constant-logical-expr`](./RULES_DESCRIPTIONS.md#constant-logical-expr)   |  n/a   | Warns on constant logical expressions                        |    no    |  no   |
-| [`bool-literal-in-expr`](./RULES_DESCRIPTIONS.md#bool-literal-in-expr)|  n/a   | Suggests removing Boolean literals from logic expressions        |    no    |  no   |
-| [`redefines-builtin-id`](./RULES_DESCRIPTIONS.md#redefines-builtin-id)|  n/a   | Warns on redefinitions of builtin identifiers                    |    no    |  no   |
-| [`function-result-limit`](./RULES_DESCRIPTIONS.md#function-result-limit) |  int (defaults to 3)| Specifies the maximum number of results a function can return    |    no    |  no   |
-| [`imports-blacklist`](./RULES_DESCRIPTIONS.md#imports-blacklist)   | []string | Disallows importing the specified packages                     |    no    |  no   |
-| [`range-val-in-closure`](./RULES_DESCRIPTIONS.md#range-val-in-closure)|  n/a   | Warns if range value is used in a closure dispatched as goroutine|    no    |  no   |
-| [`range-val-address`](./RULES_DESCRIPTIONS.md#range-val-address)|  n/a   | Warns if address of range value is used dangerously |    no    |  yes   |
-| [`waitgroup-by-value`](./RULES_DESCRIPTIONS.md#waitgroup-by-value)  |  n/a   | Warns on functions taking sync.WaitGroup as a by-value parameter |    no    |  no   |
-| [`atomic`](./RULES_DESCRIPTIONS.md#atomic)              |  n/a   | Check for common mistaken usages of the `sync/atomic` package    |    no    |  no   |
-| [`empty-lines`](./RULES_DESCRIPTIONS.md#empty-lines)   | n/a | Warns when there are heading or trailing newlines in a block              |    no    |  no   |
-| [`line-length-limit`](./RULES_DESCRIPTIONS.md#line-length-limit)   | int (defaults to 80) | Specifies the maximum number of characters in a line             |    no    |  no   |
-| [`call-to-gc`](./RULES_DESCRIPTIONS.md#call-to-gc)   | n/a    | Warns on explicit call to the garbage collector    |    no    |  no   |
-| [`duplicated-imports`](./RULES_DESCRIPTIONS.md#duplicated-imports) | n/a  | Looks for packages that are imported two or more times   |    no    |  no   |
-| [`import-shadowing`](./RULES_DESCRIPTIONS.md#import-shadowing)   | n/a    | Spots identifiers that shadow an import    |    no    |  no   |
-| [`bare-return`](./RULES_DESCRIPTIONS.md#bare-return) | n/a  | Warns on bare returns   |    no    |  no   |
-| [`unused-receiver`](./RULES_DESCRIPTIONS.md#unused-receiver)   | n/a    | Suggests to rename or remove unused method receivers    |    no    |  no   |
-| [`unhandled-error`](./RULES_DESCRIPTIONS.md#unhandled-error)   | []string   | Warns on unhandled errors returned by function calls    |    no    |  yes   |
-| [`cognitive-complexity`](./RULES_DESCRIPTIONS.md#cognitive-complexity)          |  int (defaults to 7) | Sets restriction for maximum Cognitive complexity.              |    no    |  no   |
-| [`string-of-int`](./RULES_DESCRIPTIONS.md#string-of-int)          |  n/a   | Warns on suspicious casts from int to string            |    no    |  yes   |
-| [`string-format`](./RULES_DESCRIPTIONS.md#string-format)          |  map   | Warns on specific string literals that fail one or more user-configured regular expressions            |    no    |  no   |
-| [`early-return`](./RULES_DESCRIPTIONS.md#early-return)          | []string   | Spots if-then-else statements where the predicate may be inverted to reduce nesting |    no    |  no   |
-| [`unconditional-recursion`](./RULES_DESCRIPTIONS.md#unconditional-recursion)          |  n/a   | Warns on function calls that will lead to (direct) infinite recursion |    no    |  no   |
-| [`identical-branches`](./RULES_DESCRIPTIONS.md#identical-branches)          |  n/a   | Spots if-then-else statements with identical `then` and `else` branches       |    no    |  no   |
-| [`defer`](./RULES_DESCRIPTIONS.md#defer)          |  map   |  Warns on some [defer gotchas](https://blog.learngoprogramming.com/5-gotchas-of-defer-in-go-golang-part-iii-36a1ab3d6ef1)       |    no    |  no   |
-| [`unexported-naming`](./RULES_DESCRIPTIONS.md#unexported-naming)          |  n/a   |  Warns on wrongly named un-exported symbols       |    no    |  no   |
-| [`function-length`](./RULES_DESCRIPTIONS.md#function-length)          |  int, int (defaults to 50 statements, 75 lines)   |  Warns on functions exceeding the statements or lines max |    no    |  no   |
-| [`nested-structs`](./RULES_DESCRIPTIONS.md#nested-structs)          |  n/a   |  Warns on structs within structs |    no    |  no   |
-| [`useless-break`](./RULES_DESCRIPTIONS.md#useless-break)          |  n/a   |  Warns on useless `break` statements in case clauses |    no    |  no   |
-| [`banned-characters`](./RULES_DESCRIPTIONS.md#banned-characters)          |  []string (defaults to []string{})   |  Checks banned characters in identifiers |    no    |  no   |
-| [`optimize-operands-order`](./RULES_DESCRIPTIONS.md#optimize-operands-order)          |  n/a   |  Checks inefficient conditional expressions |    no    |  no   |
-| [`use-any`](./RULES_DESCRIPTIONS.md#use-any)          |  n/a   |  Proposes to replace `interface{}` with its alias `any` |    no    |  no   |
-| [`datarace`](./RULES_DESCRIPTIONS.md#datarace)          |  n/a   |  Spots potential dataraces |    no    |  no   |
-| [`comment-spacings`](./RULES_DESCRIPTIONS.md#comment-spacings)          |  []string   |  Warns on malformed comments |    no    |  no   |
-| [`redundant-import-alias`](./RULES_DESCRIPTIONS.md#redundant-import-alias)          |  n/a   |  Warns on import aliases matching the imported package name |    no    |  no   |
-| [`import-alias-naming`](./RULES_DESCRIPTIONS.md#import-alias-naming)         | string (defaults to ^[a-z][a-z0-9]{0,}$) | Conventions around the naming of import aliases.                              |    no    |  no   |
-
+| [`context-keys-type`](./RULES_DESCRIPTIONS.md#context-key-types) | n/a | Disallows the usage of basic types in `context.WithValue`. | yes | yes |
+| [`time-equal`](./RULES_DESCRIPTIONS.md#time-equal) | n/a | Suggests to use `time.Time.Equal` instead of `==` and `!=` for equality check time. | no | yes |
+| [`time-naming`](./RULES_DESCRIPTIONS.md#time-naming) | n/a | Conventions around the naming of time variables. | yes | yes |
+| [`unchecked-type-assertions`](./RULES_DESCRIPTIONS.md#unchecked-type-assertions) | n/a | Disallows type assertions without checking the result. | no | yes |
+| [`var-declaration`](./RULES_DESCRIPTIONS.md#var-declaration) | n/a | Reduces redundancies around variable declaration. | yes | yes |
+| [`unexported-return`](./RULES_DESCRIPTIONS.md#unexported-return) | n/a | Warns when a public return is from unexported type. | yes | yes |
+| [`errorf`](./RULES_DESCRIPTIONS.md#errorf) | n/a | Should replace `errors.New(fmt.Sprintf())` with `fmt.Errorf()` | yes | yes |
+| [`blank-imports`](./RULES_DESCRIPTIONS.md#blank-imports) | n/a | Disallows blank imports | yes | no |
+| [`context-as-argument`](./RULES_DESCRIPTIONS.md#context-as-argument) | n/a | `context.Context` should be the first argument of a function. | yes | no |
+| [`dot-imports`](./RULES_DESCRIPTIONS.md#dot-imports) | n/a | Forbids `.` imports. | yes | no |
+| [`error-return`](./RULES_DESCRIPTIONS.md#error-return) | n/a | The error return parameter should be last. | yes | no |
+| [`error-strings`](./RULES_DESCRIPTIONS.md#error-strings) | []string | Conventions around error strings. | yes | no |
+| [`error-naming`](./RULES_DESCRIPTIONS.md#error-naming) | n/a | Naming of error variables. | yes | no |
+| [`exported`](./RULES_DESCRIPTIONS.md#exported) | []string | Naming and commenting conventions on exported symbols. | yes | no |
+| [`if-return`](./RULES_DESCRIPTIONS.md#if-return) | n/a | Redundant if when returning an error. | no | no |
+| [`increment-decrement`](./RULES_DESCRIPTIONS.md#increment-decrement) | n/a | Use `i++` and `i--` instead of `i += 1` and `i -= 1`. | yes | no |
+| [`var-naming`](./RULES_DESCRIPTIONS.md#var-naming) | whitelist & blacklist of initialisms | Naming rules. | yes | no |
+| [`package-comments`](./RULES_DESCRIPTIONS.md#package-comments) | n/a | Package commenting conventions. | yes | no |
+| [`range`](./RULES_DESCRIPTIONS.md#range) | n/a | Prevents redundant variables when iterating over a collection. | yes | no |
+| [`receiver-naming`](./RULES_DESCRIPTIONS.md#receiver-naming) | n/a | Conventions around the naming of receivers. | yes | no |
+| [`indent-error-flow`](./RULES_DESCRIPTIONS.md#indent-error-flow) | []string | Prevents redundant else statements. | yes | no |
+| [`argument-limit`](./RULES_DESCRIPTIONS.md#argument-limit) | int (defaults to 8) | Specifies the maximum number of arguments a function can receive | no | no |
+| [`cyclomatic`](./RULES_DESCRIPTIONS.md#cyclomatic) | int (defaults to 10) | Sets restriction for maximum Cyclomatic complexity. | no | no |
+| [`max-public-structs`](./RULES_DESCRIPTIONS.md#max-public-structs) | int (defaults to 5) | The maximum number of public structs in a file. | no | no |
+| [`file-header`](./RULES_DESCRIPTIONS.md#file-header) | string (defaults to none)| Header which each file should have. | no | no |
+| [`empty-block`](./RULES_DESCRIPTIONS.md#empty-block) | n/a | Warns on empty code blocks | no | yes |
+| [`superfluous-else`](./RULES_DESCRIPTIONS.md#superfluous-else) | []string | Prevents redundant else statements (extends [`indent-error-flow`](./RULES_DESCRIPTIONS.md#indent-error-flow)) | no | no |
+| [`confusing-naming`](./RULES_DESCRIPTIONS.md#confusing-naming) | n/a | Warns on methods with names that differ only by capitalization | no | no |
+| [`get-return`](./RULES_DESCRIPTIONS.md#get-return) | n/a | Warns on getters that do not yield any result | no | no |
+| [`modifies-parameter`](./RULES_DESCRIPTIONS.md#modifies-parameter) | n/a | Warns on assignments to function parameters | no | no |
+| [`confusing-results`](./RULES_DESCRIPTIONS.md#confusing-results) | n/a | Suggests to name potentially confusing function results | no | no |
+| [`deep-exit`](./RULES_DESCRIPTIONS.md#deep-exit) | n/a | Looks for program exits in funcs other than `main()` or `init()` | no | no |
+| [`unused-parameter`](./RULES_DESCRIPTIONS.md#unused-parameter) | n/a | Suggests to rename or remove unused function parameters | no | no |
+| [`unreachable-code`](./RULES_DESCRIPTIONS.md#unreachable-code) | n/a | Warns on unreachable code | no | no |
+| [`add-constant`](./RULES_DESCRIPTIONS.md#add-constant) | map | Suggests using constant for magic numbers and string literals | no | no |
+| [`flag-parameter`](./RULES_DESCRIPTIONS.md#flag-parameter) | n/a | Warns on boolean parameters that create a control coupling | no | no |
+| [`unnecessary-stmt`](./RULES_DESCRIPTIONS.md#unnecessary-stmt) | n/a | Suggests removing or simplifying unnecessary statements | no | no |
+| [`struct-tag`](./RULES_DESCRIPTIONS.md#struct-tag) | []string | Checks common struct tags like `json`, `xml`, `yaml` | no | no |
+| [`modifies-value-receiver`](./RULES_DESCRIPTIONS.md#modifies-value-receiver) | n/a | Warns on assignments to value-passed method receivers | no | yes |
+| [`constant-logical-expr`](./RULES_DESCRIPTIONS.md#constant-logical-expr) | n/a | Warns on constant logical expressions | no | no |
+| [`bool-literal-in-expr`](./RULES_DESCRIPTIONS.md#bool-literal-in-expr)| n/a | Suggests removing Boolean literals from logic expressions | no | no |
+| [`redefines-builtin-id`](./RULES_DESCRIPTIONS.md#redefines-builtin-id)| n/a | Warns on redefinitions of builtin identifiers | no | no |
+| [`function-result-limit`](./RULES_DESCRIPTIONS.md#function-result-limit) | int (defaults to 3)| Specifies the maximum number of results a function can return | no | no |
+| [`imports-blacklist`](./RULES_DESCRIPTIONS.md#imports-blacklist) | []string | Disallows importing the specified packages | no | no |
+| [`range-val-in-closure`](./RULES_DESCRIPTIONS.md#range-val-in-closure)| n/a | Warns if range value is used in a closure dispatched as goroutine| no | no |
+| [`range-val-address`](./RULES_DESCRIPTIONS.md#range-val-address)| n/a | Warns if address of range value is used dangerously | no | yes |
+| [`waitgroup-by-value`](./RULES_DESCRIPTIONS.md#waitgroup-by-value) | n/a | Warns on functions taking sync.WaitGroup as a by-value parameter | no | no |
+| [`atomic`](./RULES_DESCRIPTIONS.md#atomic) | n/a | Check for common mistaken usages of the `sync/atomic` package | no | no |
+| [`empty-lines`](./RULES_DESCRIPTIONS.md#empty-lines) | n/a | Warns when there are heading or trailing newlines in a block | no | no |
+| [`line-length-limit`](./RULES_DESCRIPTIONS.md#line-length-limit) | int (defaults to 80) | Specifies the maximum number of characters in a line | no | no |
+| [`call-to-gc`](./RULES_DESCRIPTIONS.md#call-to-gc) | n/a | Warns on explicit call to the garbage collector | no | no |
+| [`duplicated-imports`](./RULES_DESCRIPTIONS.md#duplicated-imports) | n/a | Looks for packages that are imported two or more times | no | no |
+| [`import-shadowing`](./RULES_DESCRIPTIONS.md#import-shadowing) | n/a | Spots identifiers that shadow an import | no | no |
+| [`bare-return`](./RULES_DESCRIPTIONS.md#bare-return) | n/a | Warns on bare returns | no | no |
+| [`unused-receiver`](./RULES_DESCRIPTIONS.md#unused-receiver) | n/a | Suggests to rename or remove unused method receivers | no | no |
+| [`unhandled-error`](./RULES_DESCRIPTIONS.md#unhandled-error) | []string | Warns on unhandled errors returned by function calls | no | yes |
+| [`cognitive-complexity`](./RULES_DESCRIPTIONS.md#cognitive-complexity) | int (defaults to 7) | Sets restriction for maximum Cognitive complexity. | no | no |
+| [`string-of-int`](./RULES_DESCRIPTIONS.md#string-of-int) | n/a | Warns on suspicious casts from int to string | no | yes |
+| [`string-format`](./RULES_DESCRIPTIONS.md#string-format) | map | Warns on specific string literals that fail one or more user-configured regular expressions | no | no |
+| [`early-return`](./RULES_DESCRIPTIONS.md#early-return) | []string | Spots if-then-else statements where the predicate may be inverted to reduce nesting | no | no |
+| [`unconditional-recursion`](./RULES_DESCRIPTIONS.md#unconditional-recursion) | n/a | Warns on function calls that will lead to (direct) infinite recursion | no | no |
+| [`identical-branches`](./RULES_DESCRIPTIONS.md#identical-branches) | n/a | Spots if-then-else statements with identical `then` and `else` branches | no | no |
+| [`defer`](./RULES_DESCRIPTIONS.md#defer) | map | Warns on some [defer gotchas](https://blog.learngoprogramming.com/5-gotchas-of-defer-in-go-golang-part-iii-36a1ab3d6ef1) | no | no |
+| [`unexported-naming`](./RULES_DESCRIPTIONS.md#unexported-naming) | n/a | Warns on wrongly named un-exported symbols | no | no |
+| [`function-length`](./RULES_DESCRIPTIONS.md#function-length) | int, int (defaults to 50 statements, 75 lines) | Warns on functions exceeding the statements or lines max | no | no |
+| [`nested-structs`](./RULES_DESCRIPTIONS.md#nested-structs) | n/a | Warns on structs within structs | no | no |
+| [`useless-break`](./RULES_DESCRIPTIONS.md#useless-break) | n/a | Warns on useless `break` statements in case clauses | no | no |
+| [`banned-characters`](./RULES_DESCRIPTIONS.md#banned-characters) | []string (defaults to []string{}) | Checks banned characters in identifiers | no | no |
+| [`optimize-operands-order`](./RULES_DESCRIPTIONS.md#optimize-operands-order) | n/a | Checks inefficient conditional expressions | no | no |
+| [`use-any`](./RULES_DESCRIPTIONS.md#use-any) | n/a | Proposes to replace `interface{}` with its alias `any` | no | no |
+| [`datarace`](./RULES_DESCRIPTIONS.md#datarace) | n/a | Spots potential dataraces | no | no |
+| [`comment-spacings`](./RULES_DESCRIPTIONS.md#comment-spacings) | []string | Warns on malformed comments | no | no |
+| [`redundant-import-alias`](./RULES_DESCRIPTIONS.md#redundant-import-alias) | n/a | Warns on import aliases matching the imported package name | no | no |
+| [`import-alias-naming`](./RULES_DESCRIPTIONS.md#import-alias-naming) | string (defaults to ^[a-z][a-z0-9]{0,}$) | Conventions around the naming of import aliases. | no | no |
 
 ## Configurable rules
 
@@ -583,10 +588,10 @@ The unix formatter produces the same output as the default formatter but surroun
 ![Unix formatter](/assets/formatter-unix.png)
 
 ### SARIF
-The `sarif`  formatter produces outputs in SARIF, for _Static Analysis Results Interchange Format_, a standard JSON-based format for the output of static analysis tools defined and promoted by [OASIS](https://www.oasis-open.org/).
 
-Current supported version of the standard is [SARIF-v2.1.0](https://docs.oasis-open.org/sarif/sarif/v2.1.0/csprd01/sarif-v2.1.0-csprd01.html
-).
+The `sarif` formatter produces outputs in SARIF, for _Static Analysis Results Interchange Format_, a standard JSON-based format for the output of static analysis tools defined and promoted by [OASIS](https://www.oasis-open.org/).
+
+Current supported version of the standard is [SARIF-v2.1.0](https://docs.oasis-open.org/sarif/sarif/v2.1.0/csprd01/sarif-v2.1.0-csprd01.html).
 
 ## Extensibility
 
@@ -626,11 +631,12 @@ With the snippet above we:
 A sample rule implementation can be found [here](/rule/argument-limit.go).
 
 #### Using `revive` as a library
-If a rule is specific to your use case 
+
+If a rule is specific to your use case
 (i.e. it is not a good candidate to be added to `revive`'s rule set) you can add it to your own linter using `revive` as linting engine.
 
 The following code shows how to use `revive` in your own application.
-In the example only one rule is added (`myRule`), of course, you can add as many as you need to. 
+In the example only one rule is added (`myRule`), of course, you can add as many as you need to.
 Your rules can be configured programmatically or with the standard `revive` configuration file.
 The full rule set of `revive` is also actionable by your application.
 
@@ -638,9 +644,9 @@ The full rule set of `revive` is also actionable by your application.
 package main
 
 import (
-	"github.com/mgechev/revive/cli"
-	"github.com/mgechev/revive/lint"
-	"github.com/mgechev/revive/revivelib"
+	"github.com/mittwald/revive/cli"
+	"github.com/mittwald/revive/lint"
+	"github.com/mittwald/revive/revivelib"
 )
 
 func main() {
@@ -662,9 +668,9 @@ You can still go further and use `revive` without its cli, as part of your libra
 package mylib
 
 import (
-	"github.com/mgechev/revive/cli"
-	"github.com/mgechev/revive/revivelib"
-	"github.com/mgechev/revive/lint"
+	"github.com/mittwald/revive/cli"
+	"github.com/mittwald/revive/revivelib"
+	"github.com/mittwald/revive/lint"
 )
 
 // Error checking removed for clarity
@@ -773,41 +779,41 @@ REVIVE_FORCE_COLOR=1 revive -formatter friendly ./... | tee revive.log
 
 ## Contributors
 
-[<img alt="renovate[bot]" src="https://avatars.githubusercontent.com/in/2740?v=4&s=117" width="117">](https://github.com/apps/renovate) |[<img alt="mgechev" src="https://avatars.githubusercontent.com/u/455023?v=4&s=117" width="117">](https://github.com/mgechev) |[<img alt="chavacava" src="https://avatars.githubusercontent.com/u/25788468?v=4&s=117" width="117">](https://github.com/chavacava) |[<img alt="renovate-bot" src="https://avatars.githubusercontent.com/u/25180681?v=4&s=117" width="117">](https://github.com/renovate-bot) |[<img alt="xuri" src="https://avatars.githubusercontent.com/u/2809468?v=4&s=117" width="117">](https://github.com/xuri) |[<img alt="doniacld" src="https://avatars.githubusercontent.com/u/19799268?v=4&s=117" width="117">](https://github.com/doniacld) |
-:---: |:---: |:---: |:---: |:---: |:---: |
-[renovate[bot]](https://github.com/apps/renovate) |[mgechev](https://github.com/mgechev) |[chavacava](https://github.com/chavacava) |[renovate-bot](https://github.com/renovate-bot) |[xuri](https://github.com/xuri) |[doniacld](https://github.com/doniacld) |
+| [<img alt="renovate[bot]" src="https://avatars.githubusercontent.com/in/2740?v=4&s=117" width="117">](https://github.com/apps/renovate) | [<img alt="mgechev" src="https://avatars.githubusercontent.com/u/455023?v=4&s=117" width="117">](https://github.com/mgechev) | [<img alt="chavacava" src="https://avatars.githubusercontent.com/u/25788468?v=4&s=117" width="117">](https://github.com/chavacava) | [<img alt="renovate-bot" src="https://avatars.githubusercontent.com/u/25180681?v=4&s=117" width="117">](https://github.com/renovate-bot) | [<img alt="xuri" src="https://avatars.githubusercontent.com/u/2809468?v=4&s=117" width="117">](https://github.com/xuri) | [<img alt="doniacld" src="https://avatars.githubusercontent.com/u/19799268?v=4&s=117" width="117">](https://github.com/doniacld) |
+| :-------------------------------------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------------------------: |
+|                                            [renovate[bot]](https://github.com/apps/renovate)                                            |                                            [mgechev](https://github.com/mgechev)                                             |                                             [chavacava](https://github.com/chavacava)                                              |                                             [renovate-bot](https://github.com/renovate-bot)                                              |                                             [xuri](https://github.com/xuri)                                             |                                             [doniacld](https://github.com/doniacld)                                              |
 
-[<img alt="Clivern" src="https://avatars.githubusercontent.com/u/1634427?v=4&s=117" width="117">](https://github.com/Clivern) |[<img alt="bernhardreisenberger" src="https://avatars.githubusercontent.com/u/5809300?v=4&s=117" width="117">](https://github.com/bernhardreisenberger) |[<img alt="morphy2k" src="https://avatars.githubusercontent.com/u/4280578?v=4&s=117" width="117">](https://github.com/morphy2k) |[<img alt="butuzov" src="https://avatars.githubusercontent.com/u/651824?v=4&s=117" width="117">](https://github.com/butuzov) |[<img alt="dshemin" src="https://avatars.githubusercontent.com/u/11780307?v=4&s=117" width="117">](https://github.com/dshemin) |[<img alt="heynemann" src="https://avatars.githubusercontent.com/u/60965?v=4&s=117" width="117">](https://github.com/heynemann) |
-:---: |:---: |:---: |:---: |:---: |:---: |
-[Clivern](https://github.com/Clivern) |[bernhardreisenberger](https://github.com/bernhardreisenberger) |[morphy2k](https://github.com/morphy2k) |[butuzov](https://github.com/butuzov) |[dshemin](https://github.com/dshemin) |[heynemann](https://github.com/heynemann) |
+| [<img alt="Clivern" src="https://avatars.githubusercontent.com/u/1634427?v=4&s=117" width="117">](https://github.com/Clivern) | [<img alt="bernhardreisenberger" src="https://avatars.githubusercontent.com/u/5809300?v=4&s=117" width="117">](https://github.com/bernhardreisenberger) | [<img alt="morphy2k" src="https://avatars.githubusercontent.com/u/4280578?v=4&s=117" width="117">](https://github.com/morphy2k) | [<img alt="butuzov" src="https://avatars.githubusercontent.com/u/651824?v=4&s=117" width="117">](https://github.com/butuzov) | [<img alt="dshemin" src="https://avatars.githubusercontent.com/u/11780307?v=4&s=117" width="117">](https://github.com/dshemin) | [<img alt="heynemann" src="https://avatars.githubusercontent.com/u/60965?v=4&s=117" width="117">](https://github.com/heynemann) |
+| :---------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------------: |
+|                                             [Clivern](https://github.com/Clivern)                                             |                                             [bernhardreisenberger](https://github.com/bernhardreisenberger)                                             |                                             [morphy2k](https://github.com/morphy2k)                                             |                                            [butuzov](https://github.com/butuzov)                                             |                                             [dshemin](https://github.com/dshemin)                                              |                                            [heynemann](https://github.com/heynemann)                                            |
 
-[<img alt="gsamokovarov" src="https://avatars.githubusercontent.com/u/604618?v=4&s=117" width="117">](https://github.com/gsamokovarov) |[<img alt="tymonx" src="https://avatars.githubusercontent.com/u/8367378?v=4&s=117" width="117">](https://github.com/tymonx) |[<img alt="sina-devel" src="https://avatars.githubusercontent.com/u/61763643?v=4&s=117" width="117">](https://github.com/sina-devel) |[<img alt="abeltay" src="https://avatars.githubusercontent.com/u/15604207?v=4&s=117" width="117">](https://github.com/abeltay) |[<img alt="dvejmz" src="https://avatars.githubusercontent.com/u/9487006?v=4&s=117" width="117">](https://github.com/dvejmz) |[<img alt="mihaitodor" src="https://avatars.githubusercontent.com/u/788216?v=4&s=117" width="117">](https://github.com/mihaitodor) |
-:---: |:---: |:---: |:---: |:---: |:---: |
-[gsamokovarov](https://github.com/gsamokovarov) |[tymonx](https://github.com/tymonx) |[sina-devel](https://github.com/sina-devel) |[abeltay](https://github.com/abeltay) |[dvejmz](https://github.com/dvejmz) |[mihaitodor](https://github.com/mihaitodor) |
+| [<img alt="gsamokovarov" src="https://avatars.githubusercontent.com/u/604618?v=4&s=117" width="117">](https://github.com/gsamokovarov) | [<img alt="tymonx" src="https://avatars.githubusercontent.com/u/8367378?v=4&s=117" width="117">](https://github.com/tymonx) | [<img alt="sina-devel" src="https://avatars.githubusercontent.com/u/61763643?v=4&s=117" width="117">](https://github.com/sina-devel) | [<img alt="abeltay" src="https://avatars.githubusercontent.com/u/15604207?v=4&s=117" width="117">](https://github.com/abeltay) | [<img alt="dvejmz" src="https://avatars.githubusercontent.com/u/9487006?v=4&s=117" width="117">](https://github.com/dvejmz) | [<img alt="mihaitodor" src="https://avatars.githubusercontent.com/u/788216?v=4&s=117" width="117">](https://github.com/mihaitodor) |
+| :------------------------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------------------------------: |
+|                                            [gsamokovarov](https://github.com/gsamokovarov)                                             |                                             [tymonx](https://github.com/tymonx)                                             |                                             [sina-devel](https://github.com/sina-devel)                                              |                                             [abeltay](https://github.com/abeltay)                                              |                                             [dvejmz](https://github.com/dvejmz)                                             |                                            [mihaitodor](https://github.com/mihaitodor)                                             |
 
-[<img alt="markelog" src="https://avatars.githubusercontent.com/u/945528?v=4&s=117" width="117">](https://github.com/markelog) |[<img alt="tamird" src="https://avatars.githubusercontent.com/u/1535036?v=4&s=117" width="117">](https://github.com/tamird) |[<img alt="shmsr" src="https://avatars.githubusercontent.com/u/51480165?v=4&s=117" width="117">](https://github.com/shmsr) |[<img alt="mapreal19" src="https://avatars.githubusercontent.com/u/3055997?v=4&s=117" width="117">](https://github.com/mapreal19) |[<img alt="kulti" src="https://avatars.githubusercontent.com/u/1286683?v=4&s=117" width="117">](https://github.com/kulti) |[<img alt="Aragur" src="https://avatars.githubusercontent.com/u/11004008?v=4&s=117" width="117">](https://github.com/Aragur) |
-:---: |:---: |:---: |:---: |:---: |:---: |
-[markelog](https://github.com/markelog) |[tamird](https://github.com/tamird) |[shmsr](https://github.com/shmsr) |[mapreal19](https://github.com/mapreal19) |[kulti](https://github.com/kulti) |[Aragur](https://github.com/Aragur) |
+| [<img alt="markelog" src="https://avatars.githubusercontent.com/u/945528?v=4&s=117" width="117">](https://github.com/markelog) | [<img alt="tamird" src="https://avatars.githubusercontent.com/u/1535036?v=4&s=117" width="117">](https://github.com/tamird) | [<img alt="shmsr" src="https://avatars.githubusercontent.com/u/51480165?v=4&s=117" width="117">](https://github.com/shmsr) | [<img alt="mapreal19" src="https://avatars.githubusercontent.com/u/3055997?v=4&s=117" width="117">](https://github.com/mapreal19) | [<img alt="kulti" src="https://avatars.githubusercontent.com/u/1286683?v=4&s=117" width="117">](https://github.com/kulti) | [<img alt="Aragur" src="https://avatars.githubusercontent.com/u/11004008?v=4&s=117" width="117">](https://github.com/Aragur) |
+| :----------------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------------------------: |
+|                                            [markelog](https://github.com/markelog)                                             |                                             [tamird](https://github.com/tamird)                                             |                                             [shmsr](https://github.com/shmsr)                                              |                                             [mapreal19](https://github.com/mapreal19)                                             |                                             [kulti](https://github.com/kulti)                                             |                                             [Aragur](https://github.com/Aragur)                                              |
 
-[<img alt="s0xzwasd" src="https://avatars.githubusercontent.com/u/29286703?v=4&s=117" width="117">](https://github.com/s0xzwasd) |[<img alt="derekperkins" src="https://avatars.githubusercontent.com/u/3588778?v=4&s=117" width="117">](https://github.com/derekperkins) |[<img alt="yangdiangzb" src="https://avatars.githubusercontent.com/u/16643665?v=4&s=117" width="117">](https://github.com/yangdiangzb) |[<img alt="petethepig" src="https://avatars.githubusercontent.com/u/662636?v=4&s=117" width="117">](https://github.com/petethepig) |[<img alt="euank" src="https://avatars.githubusercontent.com/u/2147649?v=4&s=117" width="117">](https://github.com/euank) |[<img alt="quasilyte" src="https://avatars.githubusercontent.com/u/6286655?v=4&s=117" width="117">](https://github.com/quasilyte) |
-:---: |:---: |:---: |:---: |:---: |:---: |
-[s0xzwasd](https://github.com/s0xzwasd) |[derekperkins](https://github.com/derekperkins) |[yangdiangzb](https://github.com/yangdiangzb) |[petethepig](https://github.com/petethepig) |[euank](https://github.com/euank) |[quasilyte](https://github.com/quasilyte) |
+| [<img alt="s0xzwasd" src="https://avatars.githubusercontent.com/u/29286703?v=4&s=117" width="117">](https://github.com/s0xzwasd) | [<img alt="derekperkins" src="https://avatars.githubusercontent.com/u/3588778?v=4&s=117" width="117">](https://github.com/derekperkins) | [<img alt="yangdiangzb" src="https://avatars.githubusercontent.com/u/16643665?v=4&s=117" width="117">](https://github.com/yangdiangzb) | [<img alt="petethepig" src="https://avatars.githubusercontent.com/u/662636?v=4&s=117" width="117">](https://github.com/petethepig) | [<img alt="euank" src="https://avatars.githubusercontent.com/u/2147649?v=4&s=117" width="117">](https://github.com/euank) | [<img alt="quasilyte" src="https://avatars.githubusercontent.com/u/6286655?v=4&s=117" width="117">](https://github.com/quasilyte) |
+| :------------------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------: |
+|                                             [s0xzwasd](https://github.com/s0xzwasd)                                              |                                             [derekperkins](https://github.com/derekperkins)                                             |                                             [yangdiangzb](https://github.com/yangdiangzb)                                              |                                            [petethepig](https://github.com/petethepig)                                             |                                             [euank](https://github.com/euank)                                             |                                             [quasilyte](https://github.com/quasilyte)                                             |
 
-[<img alt="grongor" src="https://avatars.githubusercontent.com/u/972493?v=4&s=117" width="117">](https://github.com/grongor) |[<img alt="jamesmaidment" src="https://avatars.githubusercontent.com/u/2050324?v=4&s=117" width="117">](https://github.com/jamesmaidment) |[<img alt="jan-xyz" src="https://avatars.githubusercontent.com/u/5249233?v=4&s=117" width="117">](https://github.com/jan-xyz) |[<img alt="jefersonf" src="https://avatars.githubusercontent.com/u/3049540?v=4&s=117" width="117">](https://github.com/jefersonf) |[<img alt="johnrichardrinehart" src="https://avatars.githubusercontent.com/u/6321578?v=4&s=117" width="117">](https://github.com/johnrichardrinehart) |[<img alt="very-amused" src="https://avatars.githubusercontent.com/u/44382255?v=4&s=117" width="117">](https://github.com/very-amused) |
-:---: |:---: |:---: |:---: |:---: |:---: |
-[grongor](https://github.com/grongor) |[jamesmaidment](https://github.com/jamesmaidment) |[jan-xyz](https://github.com/jan-xyz) |[jefersonf](https://github.com/jefersonf) |[johnrichardrinehart](https://github.com/johnrichardrinehart) |[very-amused](https://github.com/very-amused) |
+| [<img alt="grongor" src="https://avatars.githubusercontent.com/u/972493?v=4&s=117" width="117">](https://github.com/grongor) | [<img alt="jamesmaidment" src="https://avatars.githubusercontent.com/u/2050324?v=4&s=117" width="117">](https://github.com/jamesmaidment) | [<img alt="jan-xyz" src="https://avatars.githubusercontent.com/u/5249233?v=4&s=117" width="117">](https://github.com/jan-xyz) | [<img alt="jefersonf" src="https://avatars.githubusercontent.com/u/3049540?v=4&s=117" width="117">](https://github.com/jefersonf) | [<img alt="johnrichardrinehart" src="https://avatars.githubusercontent.com/u/6321578?v=4&s=117" width="117">](https://github.com/johnrichardrinehart) | [<img alt="very-amused" src="https://avatars.githubusercontent.com/u/44382255?v=4&s=117" width="117">](https://github.com/very-amused) |
+| :--------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------------------------------: |
+|                                            [grongor](https://github.com/grongor)                                             |                                             [jamesmaidment](https://github.com/jamesmaidment)                                             |                                             [jan-xyz](https://github.com/jan-xyz)                                             |                                             [jefersonf](https://github.com/jefersonf)                                             |                                             [johnrichardrinehart](https://github.com/johnrichardrinehart)                                             |                                             [very-amused](https://github.com/very-amused)                                              |
 
-[<img alt="ldez" src="https://avatars.githubusercontent.com/u/5674651?v=4&s=117" width="117">](https://github.com/ldez) |[<img alt="mathieu-aubin" src="https://avatars.githubusercontent.com/u/15820228?v=4&s=117" width="117">](https://github.com/mathieu-aubin) |[<img alt="michalhisim" src="https://avatars.githubusercontent.com/u/764249?v=4&s=117" width="117">](https://github.com/michalhisim) |[<img alt="pa-m" src="https://avatars.githubusercontent.com/u/5503106?v=4&s=117" width="117">](https://github.com/pa-m) |[<img alt="paul-at-start" src="https://avatars.githubusercontent.com/u/5486775?v=4&s=117" width="117">](https://github.com/paul-at-start) |[<img alt="weastur" src="https://avatars.githubusercontent.com/u/10865586?v=4&s=117" width="117">](https://github.com/weastur) |
-:---: |:---: |:---: |:---: |:---: |:---: |
-[ldez](https://github.com/ldez) |[mathieu-aubin](https://github.com/mathieu-aubin) |[michalhisim](https://github.com/michalhisim) |[pa-m](https://github.com/pa-m) |[paul-at-start](https://github.com/paul-at-start) |[weastur](https://github.com/weastur) |
+| [<img alt="ldez" src="https://avatars.githubusercontent.com/u/5674651?v=4&s=117" width="117">](https://github.com/ldez) | [<img alt="mathieu-aubin" src="https://avatars.githubusercontent.com/u/15820228?v=4&s=117" width="117">](https://github.com/mathieu-aubin) | [<img alt="michalhisim" src="https://avatars.githubusercontent.com/u/764249?v=4&s=117" width="117">](https://github.com/michalhisim) | [<img alt="pa-m" src="https://avatars.githubusercontent.com/u/5503106?v=4&s=117" width="117">](https://github.com/pa-m) | [<img alt="paul-at-start" src="https://avatars.githubusercontent.com/u/5486775?v=4&s=117" width="117">](https://github.com/paul-at-start) | [<img alt="weastur" src="https://avatars.githubusercontent.com/u/10865586?v=4&s=117" width="117">](https://github.com/weastur) |
+| :---------------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------------------: |
+|                                             [ldez](https://github.com/ldez)                                             |                                             [mathieu-aubin](https://github.com/mathieu-aubin)                                              |                                            [michalhisim](https://github.com/michalhisim)                                             |                                             [pa-m](https://github.com/pa-m)                                             |                                             [paul-at-start](https://github.com/paul-at-start)                                             |                                             [weastur](https://github.com/weastur)                                              |
 
-[<img alt="paco0x" src="https://avatars.githubusercontent.com/u/6123425?v=4&s=117" width="117">](https://github.com/paco0x) |[<img alt="rdeusser" src="https://avatars.githubusercontent.com/u/5935071?v=4&s=117" width="117">](https://github.com/rdeusser) |[<img alt="ridvansumset" src="https://avatars.githubusercontent.com/u/26631560?v=4&s=117" width="117">](https://github.com/ridvansumset) |[<img alt="tartale" src="https://avatars.githubusercontent.com/u/9323250?v=4&s=117" width="117">](https://github.com/tartale) |[<img alt="Jarema" src="https://avatars.githubusercontent.com/u/7369771?v=4&s=117" width="117">](https://github.com/Jarema) |[<img alt="vkrol" src="https://avatars.githubusercontent.com/u/153412?v=4&s=117" width="117">](https://github.com/vkrol) |
-:---: |:---: |:---: |:---: |:---: |:---: |
-[paco0x](https://github.com/paco0x) |[rdeusser](https://github.com/rdeusser) |[ridvansumset](https://github.com/ridvansumset) |[tartale](https://github.com/tartale) |[Jarema](https://github.com/Jarema) |[vkrol](https://github.com/vkrol) |
+| [<img alt="paco0x" src="https://avatars.githubusercontent.com/u/6123425?v=4&s=117" width="117">](https://github.com/paco0x) | [<img alt="rdeusser" src="https://avatars.githubusercontent.com/u/5935071?v=4&s=117" width="117">](https://github.com/rdeusser) | [<img alt="ridvansumset" src="https://avatars.githubusercontent.com/u/26631560?v=4&s=117" width="117">](https://github.com/ridvansumset) | [<img alt="tartale" src="https://avatars.githubusercontent.com/u/9323250?v=4&s=117" width="117">](https://github.com/tartale) | [<img alt="Jarema" src="https://avatars.githubusercontent.com/u/7369771?v=4&s=117" width="117">](https://github.com/Jarema) | [<img alt="vkrol" src="https://avatars.githubusercontent.com/u/153412?v=4&s=117" width="117">](https://github.com/vkrol) |
+| :-------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------------: |
+|                                             [paco0x](https://github.com/paco0x)                                             |                                             [rdeusser](https://github.com/rdeusser)                                             |                                             [ridvansumset](https://github.com/ridvansumset)                                              |                                             [tartale](https://github.com/tartale)                                             |                                             [Jarema](https://github.com/Jarema)                                             |                                            [vkrol](https://github.com/vkrol)                                             |
 
-[<img alt="cce" src="https://avatars.githubusercontent.com/u/51567?v=4&s=117" width="117">](https://github.com/cce) |[<img alt="haya14busa" src="https://avatars.githubusercontent.com/u/3797062?v=4&s=117" width="117">](https://github.com/haya14busa) |[<img alt="jmckenzieark" src="https://avatars.githubusercontent.com/u/70923399?v=4&s=117" width="117">](https://github.com/jmckenzieark) |[<img alt="techknowlogick" src="https://avatars.githubusercontent.com/u/164197?v=4&s=117" width="117">](https://github.com/techknowlogick) |[<img alt="zeripath" src="https://avatars.githubusercontent.com/u/1824502?v=4&s=117" width="117">](https://github.com/zeripath) |
-:---: |:---: |:---: |:---: |:---: |
-[cce](https://github.com/cce) |[haya14busa](https://github.com/haya14busa) |[jmckenzieark](https://github.com/jmckenzieark) |[techknowlogick](https://github.com/techknowlogick) |[zeripath](https://github.com/zeripath) |
+| [<img alt="cce" src="https://avatars.githubusercontent.com/u/51567?v=4&s=117" width="117">](https://github.com/cce) | [<img alt="haya14busa" src="https://avatars.githubusercontent.com/u/3797062?v=4&s=117" width="117">](https://github.com/haya14busa) | [<img alt="jmckenzieark" src="https://avatars.githubusercontent.com/u/70923399?v=4&s=117" width="117">](https://github.com/jmckenzieark) | [<img alt="techknowlogick" src="https://avatars.githubusercontent.com/u/164197?v=4&s=117" width="117">](https://github.com/techknowlogick) | [<img alt="zeripath" src="https://avatars.githubusercontent.com/u/1824502?v=4&s=117" width="117">](https://github.com/zeripath) |
+| :-----------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------------: |
+|                                            [cce](https://github.com/cce)                                            |                                             [haya14busa](https://github.com/haya14busa)                                             |                                             [jmckenzieark](https://github.com/jmckenzieark)                                              |                                            [techknowlogick](https://github.com/techknowlogick)                                             |                                             [zeripath](https://github.com/zeripath)                                             |
 
 ## License
 

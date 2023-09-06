@@ -8,7 +8,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/mgechev/revive/lint"
+	"github.com/mittwald/revive/lint"
 )
 
 var anyCapsRE = regexp.MustCompile(`[A-Z]`)

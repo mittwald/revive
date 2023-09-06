@@ -5,11 +5,11 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/mgechev/revive/formatter"
+	"github.com/mittwald/revive/formatter"
 
 	"github.com/BurntSushi/toml"
-	"github.com/mgechev/revive/lint"
-	"github.com/mgechev/revive/rule"
+	"github.com/mittwald/revive/lint"
+	"github.com/mittwald/revive/rule"
 )
 
 var defaultRules = []lint.Rule{

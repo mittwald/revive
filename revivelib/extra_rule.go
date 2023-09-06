@@ -1,6 +1,6 @@
 package revivelib
 
-import "github.com/mgechev/revive/lint"
+import "github.com/mittwald/revive/lint"
 
 // ExtraRule configures a new rule to be used with revive.
 type ExtraRule struct {

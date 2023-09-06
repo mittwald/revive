@@ -3,7 +3,7 @@ package test
 import (
 	"testing"
 
-	"github.com/mgechev/revive/rule"
+	"github.com/mittwald/revive/rule"
 )
 
 func TestDatarace(t *testing.T) {

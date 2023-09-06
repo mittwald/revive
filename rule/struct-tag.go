@@ -8,7 +8,7 @@ import (
 	"sync"
 
 	"github.com/fatih/structtag"
-	"github.com/mgechev/revive/lint"
+	"github.com/mittwald/revive/lint"
 )
 
 // StructTagRule lints struct tags.

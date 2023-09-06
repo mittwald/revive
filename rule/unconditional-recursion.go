@@ -3,7 +3,7 @@ package rule
 import (
 	"go/ast"
 
-	"github.com/mgechev/revive/lint"
+	"github.com/mittwald/revive/lint"
 )
 
 // UnconditionalRecursionRule lints given else constructs.

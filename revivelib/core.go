@@ -6,9 +6,9 @@ import (
 	"strings"
 
 	"github.com/mgechev/dots"
-	"github.com/mgechev/revive/config"
-	"github.com/mgechev/revive/lint"
-	"github.com/mgechev/revive/logging"
+	"github.com/mittwald/revive/config"
+	"github.com/mittwald/revive/lint"
+	"github.com/mittwald/revive/logging"
 	"github.com/pkg/errors"
 )
 

@@ -7,8 +7,8 @@ import (
 	"regexp"
 	"testing"
 
-	"github.com/mgechev/revive/lint"
-	"github.com/mgechev/revive/rule"
+	"github.com/mittwald/revive/lint"
+	"github.com/mittwald/revive/rule"
 )
 
 var lintMatch = flag.String("lint.match", "", "restrict fixtures matches to this pattern")

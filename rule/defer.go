@@ -5,7 +5,7 @@ import (
 	"go/ast"
 	"sync"
 
-	"github.com/mgechev/revive/lint"
+	"github.com/mittwald/revive/lint"
 )
 
 // DeferRule lints unused params in functions.
